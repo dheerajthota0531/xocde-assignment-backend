@@ -1,0 +1,160 @@
+### MERN Stack Backend API Testing
+### Use REST Client extension in VS Code or similar tool
+
+@baseUrl = http://localhost:5000/api/v1
+@token = YOUR_JWT_TOKEN_HERE
+
+### ============================================
+### AUTHENTICATION
+### ============================================
+
+### 1. Initiate Google OAuth (Open in browser)
+GET {{baseUrl}}/auth/google
+
+### 2. Get Current User (Protected)
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{token}}
+
+### 3. Logout (Protected)
+POST {{baseUrl}}/auth/logout
+Authorization: Bearer {{token}}
+
+### ============================================
+### POSTS
+### ============================================
+
+### 4. Create Post (Text Only)
+POST {{baseUrl}}/posts
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "text": "This is my first post!"
+}
+
+### 5. Create Post (With Image)
+POST {{baseUrl}}/posts
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="text"
+
+Post with image
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="image"; filename="image.jpg"
+Content-Type: image/jpeg
+
+< ./path/to/image.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### 6. Create Post (With Video)
+POST {{baseUrl}}/posts
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="text"
+
+Post with video
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="video"; filename="video.mp4"
+Content-Type: video/mp4
+
+< ./path/to/video.mp4
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### 7. Get All Posts
+GET {{baseUrl}}/posts
+Authorization: Bearer {{token}}
+
+### 8. Get Single Post
+GET {{baseUrl}}/posts/POST_ID_HERE
+Authorization: Bearer {{token}}
+
+### 9. Update Post (Owner Only)
+PUT {{baseUrl}}/posts/POST_ID_HERE
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "text": "Updated post text"
+}
+
+### 10. Delete Post (Owner Only)
+DELETE {{baseUrl}}/posts/POST_ID_HERE
+Authorization: Bearer {{token}}
+
+### ============================================
+### FRIENDS
+### ============================================
+
+### 11. Send Friend Request
+POST {{baseUrl}}/friends/request/USER_ID_HERE
+Authorization: Bearer {{token}}
+
+### 12. Get Friend Requests (Received)
+GET {{baseUrl}}/friends/requests
+Authorization: Bearer {{token}}
+
+### 13. Accept Friend Request
+PUT {{baseUrl}}/friends/accept/REQUEST_ID_HERE
+Authorization: Bearer {{token}}
+
+### 14. Reject Friend Request
+PUT {{baseUrl}}/friends/reject/REQUEST_ID_HERE
+Authorization: Bearer {{token}}
+
+### 15. Get Friends List
+GET {{baseUrl}}/friends
+Authorization: Bearer {{token}}
+
+### 16. Check if Friends
+GET {{baseUrl}}/friends/check/USER_ID_HERE
+Authorization: Bearer {{token}}
+
+### ============================================
+### CHAT
+### ============================================
+
+### 17. Send Message (Friends Only)
+POST {{baseUrl}}/chat/message
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "receiver": "USER_ID_HERE",
+  "text": "Hello! How are you?"
+}
+
+### 18. Get Messages with User (Friends Only)
+GET {{baseUrl}}/chat/messages/USER_ID_HERE
+Authorization: Bearer {{token}}
+
+### 19. Get All Conversations
+GET {{baseUrl}}/chat/conversations
+Authorization: Bearer {{token}}
+
+### ============================================
+### HEALTH CHECK
+### ============================================
+
+### 20. Health Check
+GET http://localhost:5000/api/health
+
+### ============================================
+### NOTES
+### ============================================
+### 
+### 1. Replace {{token}} with actual JWT token from Google OAuth callback
+### 2. Replace USER_ID_HERE, POST_ID_HERE, REQUEST_ID_HERE with actual IDs
+### 3. For file uploads, use actual file paths
+### 4. All protected routes require Authorization header with Bearer token
+### 5. Google OAuth flow:
+###    - GET /auth/google (redirects to Google)
+###    - Google redirects to /auth/google/callback
+###    - Callback redirects to frontend with token
+###    - Use token in Authorization header for protected routes
+###
+### ============================================
+
